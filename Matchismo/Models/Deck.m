@@ -20,7 +20,7 @@
 #pragma mark - Instance Methods
 
 -(NSMutableArray *)cards{
-    if(_cards) _cards = [[NSMutableArray alloc] init];
+    if(!_cards) _cards = [[NSMutableArray alloc] init];
     return _cards;
 }
 
@@ -45,7 +45,6 @@
         randomCard = [self.cards objectAtIndex:index];
         [self.cards removeObjectAtIndex:index];
     }
-    
     return randomCard;
 }
 

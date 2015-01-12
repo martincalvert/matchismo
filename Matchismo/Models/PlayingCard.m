@@ -31,7 +31,7 @@
 #pragma mark - Class Methods
 
 + (NSArray *)validSuits{
-    return @[@"♣️",@"♠️",@"♥️",@"♦️"];
+    return @[@"♥️",@"♦️",@"♠️",@"♣️"];
 }
 
 + (NSArray *)rankStrings{
