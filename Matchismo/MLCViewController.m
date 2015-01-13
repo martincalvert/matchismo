@@ -9,19 +9,21 @@
 #import "MLCViewController.h"
 #import "PlayingCardDesk.h"
 #import "PlayingCard.h"
+#import "CardMatchingGame.h"
 
 @interface MLCViewController ()
 @property (strong, nonatomic) Deck *deck;
+@property (strong, nonatomic) CardMatchingGame *game;
+@property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
+@property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 
 @end
 
 @implementation MLCViewController
 
-- (Deck *)deck{
-    if (!_deck) {
-        _deck = [self createDeck];
-    }
-    return _deck;
+- (CardMatchingGame *)game{
+    if (!_game) _game = [[CardMatchingGame alloc]initWithCardCount:[self.cardButtons count] UsingDeck:[self createDeck]];
+    return _game;
 }
 
 - (Deck *)createDeck{
@@ -29,17 +31,28 @@
 }
 
 - (IBAction)touchCardButton:(UIButton *)sender {
-    if ([sender.currentTitle length]){
-        [sender setBackgroundImage:[UIImage imageNamed:@"cardback"]
-                          forState:UIControlStateNormal];
-        [sender setTitle:@"" forState:UIControlStateNormal];
+    int index = [self.cardButtons indexOfObject:sender];
+    [self.game chooseCardAtIndex:index];
+    [self updateUI];
+}
+
+- (void)updateUI{
+    for (UIButton *button in self.cardButtons) {
+        int index = [self.cardButtons indexOfObject:button];
+        Card *card = [self.game cardAtIndex:index];
+        [button setTitle:[self titleForCard:card] forState:UIControlStateNormal];
+        [button setBackgroundImage:[self imageForCard:card] forState:UIControlStateNormal];
+        button.enabled = !card.isMatched;
+        self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d",self.game.score];
     }
-    else{
-        Card *card = [self.deck drawRandomCard];
-        [sender setBackgroundImage:[UIImage imageNamed:@"cardfront"]
-                          forState:UIControlStateNormal];
-        [sender setTitle:[card contents] forState:UIControlStateNormal];
-    }
+}
+
+- (NSString *)titleForCard:(Card *)card{
+    return (card.isChosen) ? [card contents] : @"";
+}
+
+- (UIImage *)imageForCard:(Card *)card{
+    return [UIImage imageNamed:(card.isChosen) ? @"cardfront" : @"cardback"];
 }
 
 

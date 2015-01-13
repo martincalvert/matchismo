@@ -9,6 +9,16 @@
 #import "PlayingCard.h"
 
 @implementation PlayingCard
+
+- (int)match:(NSArray *)otherCards{
+    int score = 0;
+    for (PlayingCard *card in otherCards) {
+        if ([self.suit isEqualToString:card.suit]) score +=1;
+        if (self.rank == card.rank) score += 4;
+    }
+    return score;
+}
+
 @synthesize suit = _suit;
 
 #pragma mark - Instance Methods
