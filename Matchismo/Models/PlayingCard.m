@@ -12,9 +12,21 @@
 
 - (int)match:(NSArray *)otherCards{
     int score = 0;
+    NSMutableArray *otherSet = [otherCards mutableCopy];
     for (PlayingCard *card in otherCards) {
         if ([self.suit isEqualToString:card.suit]) score +=1;
         if (self.rank == card.rank) score += 4;
+        if (otherCards.count > 1) {
+            for (PlayingCard *cards in otherSet) {
+                if (card != cards) {
+                    if ([cards.suit isEqualToString:card.suit]) score +=1;
+                    NSLog(@"%@,%@",cards.contents,card.contents);
+                    if (cards.rank == card.rank) score += 4;
+                    [otherSet removeObject:cards];
+                }
+            }
+        }
+        
     }
     return score;
 }

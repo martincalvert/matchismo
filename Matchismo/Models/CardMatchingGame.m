@@ -14,6 +14,7 @@
 
 @property (nonatomic, readwrite) NSUInteger score;
 @property (nonatomic, strong) NSMutableArray *cards;
+@property (nonatomic, strong) NSString *resultString;
 
 @end
 
@@ -38,6 +39,7 @@ static const int BONUS = 2;
     self = [super init];
     
     if (self){
+        self.matchAmount = 3;
         for (int i = 0; i < count; i++){
             Card *card = deck.drawRandomCard;
             if (card){
@@ -55,30 +57,42 @@ static const int BONUS = 2;
 
 - (void)chooseCardAtIndex:(NSUInteger)index{
     Card *card = [self cardAtIndex:index];
+    self.resultString = [NSString stringWithFormat:@"%@",card.contents];
     
     if (!card.isMatched){
         if (card.isChosen) {
             card.chosen = NO;
+            self.resultString = @"";
         }
         else{
+            NSMutableArray *otherCards = [[NSMutableArray alloc] init];
             for (Card *otherCard in self.cards) {
                 if (otherCard.isChosen && !otherCard.isMatched) {
-                    int matchScore = [card match:@[otherCard]];
+                    [otherCards addObject:otherCard];
+                }
+            }
+            if (otherCards.count == self.matchAmount - 1){
+                    int matchScore = [card match:otherCards];
                     if (matchScore) {
                         self.score += matchScore * BONUS;
                         card.matched = YES;
-                        otherCard.matched = YES;
+                        NSString *otherCardResults = @"";
+                        for (Card *otherCard in otherCards) {
+                            otherCard.matched = YES;
+                            otherCardResults = [otherCardResults stringByAppendingString:otherCard.contents];
+                        }
+                        self.resultString = [self.resultString stringByAppendingString:otherCardResults];
                     }
                     else{
                         self.score -= PENALTY;
-                        otherCard.chosen = NO;
+                        for (Card *otherCard in otherCards) {
+                            otherCard.chosen = NO;
+                        }
                     }
-                    break;
-                }
             }
-            self.score -= PENALTY;
-            card.chosen = YES;
         }
+        self.score -= PENALTY;
+        card.chosen = YES;
     }
 }
 

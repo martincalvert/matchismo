@@ -19,5 +19,7 @@
 
 #pragma mark - Properties
 @property (nonatomic, readonly) NSUInteger score;
+@property (nonatomic, readonly) NSString *resultString;
+@property (nonatomic) NSUInteger matchAmount;
 
 @end
