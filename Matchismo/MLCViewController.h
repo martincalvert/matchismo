@@ -7,7 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Deck.h"
 
 @interface MLCViewController : UIViewController
+
+
+//For subclassers
+- (Deck *)createDeck; //abstract
 
 @end

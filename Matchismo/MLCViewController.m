@@ -7,8 +7,6 @@
 //
 
 #import "MLCViewController.h"
-#import "PlayingCardDesk.h"
-#import "PlayingCard.h"
 #import "CardMatchingGame.h"
 
 @interface MLCViewController ()
@@ -30,7 +28,7 @@
 }
 
 - (Deck *)createDeck{
-    return [[PlayingCardDesk alloc]init];
+    return nil;
 }
 
 - (IBAction)touchCardButton:(UIButton *)sender {
