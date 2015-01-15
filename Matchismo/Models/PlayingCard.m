@@ -20,7 +20,6 @@
             for (PlayingCard *cards in otherSet) {
                 if (card != cards) {
                     if ([cards.suit isEqualToString:card.suit]) score +=1;
-                    NSLog(@"%@,%@",cards.contents,card.contents);
                     if (cards.rank == card.rank) score += 4;
                     [otherSet removeObject:cards];
                 }

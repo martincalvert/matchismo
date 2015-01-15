@@ -81,10 +81,11 @@ static const int BONUS = 2;
                             otherCard.matched = YES;
                             otherCardResults = [otherCardResults stringByAppendingString:otherCard.contents];
                         }
-                        self.resultString = [self.resultString stringByAppendingString:otherCardResults];
+                        self.resultString = [self.resultString stringByAppendingString:[NSString    stringWithFormat:@"matched %@",otherCardResults]];
                     }
                     else{
                         self.score -= PENALTY;
+                        self.resultString = [NSString stringWithFormat:@"No Match"];
                         for (Card *otherCard in otherCards) {
                             otherCard.chosen = NO;
                         }

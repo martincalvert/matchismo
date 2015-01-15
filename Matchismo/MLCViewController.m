@@ -16,6 +16,9 @@
 @property (strong, nonatomic) CardMatchingGame *game;
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *gameTypeButton;
+@property (weak, nonatomic) IBOutlet UIButton *dealButton;
+@property (weak, nonatomic) IBOutlet UILabel *lastMoveLabel;
 
 @end
 
@@ -32,7 +35,15 @@
 
 - (IBAction)touchCardButton:(UIButton *)sender {
     int index = [self.cardButtons indexOfObject:sender];
+    self.game.matchAmount = self.gameTypeButton.selectedSegmentIndex+2;
     [self.game chooseCardAtIndex:index];
+    self.gameTypeButton.enabled = false;
+    [self updateUI];
+}
+
+- (IBAction)dealButton:(UIButton *)sender{
+    self.gameTypeButton.enabled = true;
+    self.game = nil;
     [self updateUI];
 }
 
@@ -44,6 +55,7 @@
         [button setBackgroundImage:[self imageForCard:card] forState:UIControlStateNormal];
         button.enabled = !card.isMatched;
         self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d",self.game.score];
+        self.lastMoveLabel.text = [NSString stringWithFormat:@"Last Move: %@",self.game.resultString];
     }
 }
 
